@@ -204,6 +204,7 @@
             lbl_Anweisung.Size = new Size(147, 28);
             lbl_Anweisung.TabIndex = 7;
             lbl_Anweisung.Text = "Spielanweisung";
+            lbl_Anweisung.Click += lbl_Anweisung_Click;
             // 
             // TicTacToe_Gameboard
             // 

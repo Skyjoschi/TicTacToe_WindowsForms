@@ -134,6 +134,11 @@ namespace TicTacToe_T2
 
         }
 
+        private void lbl_Anweisung_Click(object sender, EventArgs e)
+        {
+
+        }
+
         // private Kommentare:
 
         // Textboxen: Multi-Line, read-only und password-Char setzbar

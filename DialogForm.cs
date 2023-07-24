@@ -22,7 +22,8 @@ namespace TicTacToe_T2
         private void label2_Click(object sender, EventArgs e)
         {
             // These are some comments, and a new command:
-            this.close();
+            this.Close();
+            // this was added manually afterwards
         }
 
         private void btnAuswahl_Click(object sender, EventArgs e)

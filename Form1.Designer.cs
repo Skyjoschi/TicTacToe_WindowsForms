@@ -67,5 +67,8 @@
         #endregion
         private Label lbl1;
         private Button button1;
+
+        // let us add some random code here, it's fun!
+
     }
 }
