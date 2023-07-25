@@ -29,9 +29,7 @@ namespace TicTacToe_T2
 
         private void label1_Click(object sender, EventArgs e)
         {
-            // neues Kommentar:
-            this.Close();
-            // schließt, beim Klicken auf Titel
+
         }
 
         private void checkedListBox1_SelectedIndexChanged(object sender, EventArgs e)
