@@ -1,9 +1,11 @@
+using TicTacToe_WindowsForms;
+
 namespace TicTacToe_T2
 {
     public partial class Form1 : Form
     {
-        // neues DialogFenster initialiseren
-        DialogForm dialog = new DialogForm();
+        // neues Fenster initialiseren
+        UserAnmeldung login = new UserAnmeldung();
         public Form1()
         {
             InitializeComponent();
@@ -17,7 +19,7 @@ namespace TicTacToe_T2
         private void button1_Click(object sender, EventArgs e)
         {
             // ruft neues Fenster auf
-            dialog.ShowDialog();
+            login.ShowDialog();
         }
     }
 }

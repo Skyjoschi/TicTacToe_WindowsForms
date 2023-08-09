@@ -8,4 +8,18 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="7.0.10" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="database.db">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="SQLITE\MyTIcTacToe\" />
+  </ItemGroup>
+
 </Project>
