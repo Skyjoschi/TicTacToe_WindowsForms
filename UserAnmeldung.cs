@@ -69,45 +69,39 @@ namespace TicTacToe_WindowsForms
         {
             using (var con = new SqliteConnection("Data Source=database.db"))
             {
+                con.Open();
+                // Prüfen, ob Benutzer schon vorhanden.
+                string name_1 = InputUsername.Text;
+                string pw_1 = InputPW1.Text;
 
-                try
+                var cmd_1 = con.CreateCommand();
+                //string Query_1 = $"SELECT userName FROM tblUser WHERE userName = {name_1}";
+                //SqliteCommand cmd_1 = new SqliteCommand(Query_1, con);
+                cmd_1.CommandText = 
+                    @"SELECT COUNT (userName)
+                    FROM tblUser
+                    WHERE userName = $name_1
+                    ";
+                cmd_1.Parameters.AddWithValue("$name_1", name_1);
+                int RowCount = 0;
+                RowCount = Convert.ToInt32(cmd_1.ExecuteScalar());
+                MessageBox.Show($"{RowCount}");
+                if (RowCount > 0)
                 {
-                    con.Open();
-                    // Prüfen, ob Benutzer schon vorhanden.
-                    try
-                    {
-                        string Query_1 = $"SELECT userName FROM tblUser WHERE userName = {InputUsername.Text}";
-                        SqliteCommand cmd_1 = new SqliteCommand(Query_1, con);
-                        cmd_1.CommandText = Query_1;
-                        using (var reader = cmd_1.ExecuteReader())
-                        {
-                            while (reader.Read())
-                            {
-                                var name = reader.GetString(0);
-                                if (name == InputUsername.Text)
-                                {
-                                    MessageBox.Show($"Der Benutzer {InputUsername.Text} existiert schon." +
-                                        $"\n Try again.");
-                                }
-                            }
-                        }
-                    } 
-                    catch (Exception ex) 
-                    {
-                        // neuen Benutzer hinzufügen
-                        string Query = "INSERT INTO tblUser (userName,userPassword) VALUES('" + InputUsername.Text + "','" + InputPW1.Text + "')";
-                        SqliteCommand cmd = new SqliteCommand(Query, con);
-                        cmd.ExecuteNonQuery();
-                        con.Close();
-                        MessageBox.Show("Registriertung erfolgreich.");
-                    }
-
-
+                    MessageBox.Show($"Der Benutzer {name_1} existiert schon." +
+                        $"\n Try again.");
 
                 }
-                catch (Exception ex)
+                else
                 {
-                    MessageBox.Show(ex.Message);
+                    // neuen Benutzer hinzufügen
+                    string Query = "INSERT INTO tblUser (userName,userPassword) VALUES('" + InputUsername.Text + "','" + InputPW1.Text + "')";
+                    SqliteCommand cmd = new SqliteCommand(Query, con);
+                    cmd.ExecuteNonQuery();
+                    con.Close();
+                    MessageBox.Show("Registriertung erfolgreich.");
+                    // aber warum wird er immer bei userID 4 angelegt?
+                    // Warum erweitert sich die Datenbank nicht darüber hinaus?
                 }
             }
         }
