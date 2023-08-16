@@ -9,6 +9,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="SQLITE\**" />
+    <EmbeddedResource Remove="SQLITE\**" />
+    <None Remove="SQLITE\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.Data.Sqlite" Version="7.0.10" />
   </ItemGroup>
 
@@ -16,10 +22,6 @@
     <None Update="database.db">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="SQLITE\MyTIcTacToe\" />
   </ItemGroup>
 
 </Project>

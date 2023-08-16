@@ -31,6 +31,17 @@ namespace TicTacToe_WindowsForms
         {
             if (SQL_Connections.CheckLogin(InputUsername.Text, InputPW1.Text))
             {
+                string id = InputUsername.Text;
+                string nameTable = "tblScore";
+                if (SQL_Connections.AlreadyInTable(id, nameTable))
+                {
+                    SQL_Connections.UpdateData(id);
+                }
+                else
+                {
+                    SQL_Connections.InsertData(id, nameTable, "userNameFor");
+                    SQL_Connections.UpdateData(id);
+                }
                 dialog.ShowDialog();
             }
             

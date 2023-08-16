@@ -24,7 +24,7 @@ namespace TicTacToe_WindowsForms
                     SELECT userName, userPassword
                     FROM tblUser
                     WHERE userName = $id
-                ";
+                    ";
                     command.Parameters.AddWithValue("$id", id);
 
                     using (var reader = command.ExecuteReader())
@@ -73,7 +73,6 @@ namespace TicTacToe_WindowsForms
                 {
                     MessageBox.Show($"Der Benutzer {name_1} existiert schon." +
                         $"\n Try again.");
-
                 }
                 else
                 {
@@ -85,6 +84,7 @@ namespace TicTacToe_WindowsForms
                     MessageBox.Show("Registrierung erfolgreich.");
                     // aber warum wird er immer bei userID 4 angelegt?
                     // Warum erweitert sich die Datenbank nicht darüber hinaus?
+                    // -> weil die Ursprungsdatenbank immer neu geladen wird.
                 }
             }
         }
@@ -114,14 +114,87 @@ namespace TicTacToe_WindowsForms
                 {
                     // Benutzer noch unbekannt
                     MessageBox.Show("Benutzername unbekannt.");
-
                 }
             }
             return already_existing;
         }
-        public static void FillData(string id, bool win)
-        {
 
+        public static bool AlreadyInTable(string name_1, string tableName)
+        {
+            bool alreadyInTable = false;
+            using (var con = new SqliteConnection("Data Source=database.db"))
+            {
+                con.Open();
+                // Prüfen, ob Benutzer schon vorhanden
+                var cmd_1 = con.CreateCommand();
+                cmd_1.CommandText =
+                    @"SELECT COUNT (userNameFor)
+                    FROM '"+tableName+"' WHERE userNameFor = $name_1";
+                cmd_1.Parameters.AddWithValue("$name_1", name_1);
+                int RowCount = 0;
+                RowCount = Convert.ToInt32(cmd_1.ExecuteScalar());
+                if (RowCount > 0)
+                {
+                    alreadyInTable = true;
+                }
+                else
+                {
+                    // Benutzer noch unbekannt
+                    MessageBox.Show("Name in Tabelle '"+tableName+"' unbekannt.");
+                }
+            }
+            return alreadyInTable;
+        }
+
+        public static void UpdateData(string id)
+        {
+            using (var con = new SqliteConnection("Data Source=database.db"))
+            {
+                con.Open();
+                var cmd_1 = con.CreateCommand();
+                cmd_1.CommandText =
+                @"SELECT userNameFor, userGamesCount
+                FROM tblScore
+                WHERE userNameFor = $id
+                ";
+                // hier dürfen KEINE Klammern nach Select kommen
+                cmd_1.Parameters.AddWithValue("$id", id);
+
+                // Gewinn hinzufügen - eigentlich nach Ende des Spiels
+                int gaCo = 0;
+                using (var reader = cmd_1.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        var gameCount = Convert.ToInt32(reader.GetString(1));
+                        gaCo = gameCount += 1;
+                        MessageBox.Show("Reader:" + gaCo);
+                    }
+                }
+
+                string Query = @"UPDATE tblScore SET userGamesCount = '" + gaCo + "' WHERE userNameFor = '" + id + "' ";
+                // Art, um trotzdem noch eine Variable in den Query mit aufnehmen zu können: '" + variable + "'
+                SqliteCommand cmd = new SqliteCommand(Query, con);
+                cmd.ExecuteNonQuery();
+                con.Close();
+                MessageBox.Show($"Ein Gewinn mehr für {id}.");
+                
+            }
+
+        }
+        public static void InsertData(string id, string tableName, string tblClmn)
+        {
+            using (var con = new SqliteConnection("Data Source=database.db"))
+            {
+                con.Open();
+                var cmd_1 = con.CreateCommand();
+                //string Query = "INSERT INTO '"+tableName+"' ('"+tblClmn+"') VALUES('" + id + "')";
+                string Query = "UPDATE tblScore SET userGamesCount = 30 WHERE userNameFor = Hermine";
+                SqliteCommand cmd = new SqliteCommand(Query, con);
+                cmd.ExecuteNonQuery();
+                con.Close();
+                MessageBox.Show("Einfüllen erfolgreich.");
+            }
         }
     }
 }
